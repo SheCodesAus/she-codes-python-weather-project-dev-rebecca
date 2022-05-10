@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+from typing import ItemsView
 
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
@@ -46,8 +47,13 @@ def calculate_mean(weather_data):
     Returns:
         A float representing the mean value.
     """
-    pass
+    list = []
 
+    for data in weather_data:
+        list.append(data)
+    length = len(list)
+    mean = sum(list) / length
+    return mean
 
 def load_data_from_csv(csv_file):
     """Reads a csv file and stores the data in a list.
