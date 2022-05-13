@@ -51,9 +51,17 @@ def calculate_mean(weather_data):
 
     for data in weather_data:
         list.append(data)
+
     length = len(list)
-    mean = sum(list) / length
+
+    print(type(list))
+    print(type(length))
+    total = sum(list) / length
+    mean = float(total)
+
     return mean
+
+print(calculate_mean([1, 2]))
 
 def load_data_from_csv(csv_file):
     """Reads a csv file and stores the data in a list.
