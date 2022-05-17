@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+from mimetypes import init
 from typing import ItemsView
 
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
@@ -25,8 +26,17 @@ def convert_date(iso_string):
     Returns:
         A date formatted like: Weekday Date Month Year e.g. Tuesday 06 July 2021
     """
-    pass
+pass
+#     datetime.strptime(iso_string, "%d")
 
+# 2021-07-05T07:00:00+08:00
+
+# import datetime
+# test = datetime.datetime.strptime('2021-07-05T07:00:00+08:00', "%Y-%m-%dT%H:%M:%S%z")
+
+# print(test)
+
+# new = datetime.datetime.strptime(test, "%Y-%m-%dT%H:%M:%S%z")
 
 def convert_f_to_c(temp_in_farenheit):
     """Converts an temperature from farenheit to celcius.
@@ -36,8 +46,11 @@ def convert_f_to_c(temp_in_farenheit):
     Returns:
         A float representing a temperature in degrees celcius, rounded to 1dp.
     """
-    pass
-
+    float_farenheit = float(temp_in_farenheit)
+    celcius = 5/9 * (float_farenheit - 32)
+    format_celcius = "{:.1f}".format(celcius)
+    float_celcius = float(format_celcius)
+    return float_celcius
 
 def calculate_mean(weather_data):
     """Calculates the mean value from a list of numbers.
@@ -50,18 +63,15 @@ def calculate_mean(weather_data):
     list = []
 
     for data in weather_data:
-        list.append(data)
+        float_data = float(data)
+        list.append(float_data)
 
     length = len(list)
 
-    print(type(list))
-    print(type(length))
     total = sum(list) / length
     mean = float(total)
 
     return mean
-
-print(calculate_mean([1, 2]))
 
 def load_data_from_csv(csv_file):
     """Reads a csv file and stores the data in a list.
@@ -82,8 +92,19 @@ def find_min(weather_data):
     Returns:
         The minium value and it's position in the list.
     """
-    pass
 
+    index = 0
+    minimum = weather_data[0]
+
+    for num in weather_data:
+        if num <= minimum:
+            index += 1
+            minimum = num
+
+    return minimum, index
+    
+# data = [49, 57, 56, 55, 53]
+# print(find_min(data))
 
 def find_max(weather_data):
     """Calculates the maximum value in a list of numbers.
