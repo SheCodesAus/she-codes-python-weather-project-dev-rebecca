@@ -76,7 +76,6 @@ def load_data_from_csv(csv_file):
     """
 
     list = []
-    new_list = []
 
     with open(csv_file) as csv_file:
         reader = csv.reader(csv_file)
@@ -85,14 +84,13 @@ def load_data_from_csv(csv_file):
 
     list.pop(0)
 
+    list = [x for x in list if x != []]
+
     for row in list:
-        new_list.append(int(row[1]))
-        new_list.append(int(row[2]))
+        row[1] = int(row[1])
+        row[2] = int(row[2])
 
-    print(new_list)
     return list
-
-print(load_data_from_csv("tests/data/example_one.csv"))
 
 def find_min(weather_data):
     """Calculates the minimum value in a list of numbers.
@@ -126,7 +124,21 @@ def find_max(weather_data):
     Returns:
         The maximum value and it's position in the list.
     """
-    pass
+    
+    if weather_data == []:
+        return()
+
+    list = []
+
+    for num in weather_data:
+        num = float(num)
+        list.append(num)
+
+    maximum = max(list)
+
+    for i in reversed(range(len(list))):
+        if list[i] == maximum:
+            return maximum, i
 
 
 def generate_summary(weather_data):
@@ -137,8 +149,47 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
 
+    list = []
+    dates = []
+    numbers = []
+    low_numbers = []
+    high_numbers = []
+
+    for row in weather_data:
+        list.append(row)
+
+    for num in list:
+        numbers.append(num[1])
+        numbers.append(num[2])
+
+    for num in list:
+        dates.append(num[0])
+        low_numbers.append(num[1])
+        high_numbers.append(num[2])
+
+    ave_low_f = calculate_mean(low_numbers)
+    ave_low_c = convert_f_to_c(ave_low_f)
+    
+    ave_high_f = calculate_mean(high_numbers)
+    ave_high_c = convert_f_to_c(ave_high_f)
+
+    minimum = convert_f_to_c(min(numbers))
+    maximum = convert_f_to_c(max(numbers))
+
+    test = find_min(numbers)
+    print(test[1])
+    list.index(test[1])
+
+    return(f"5 Day Overview\nThe lowest temperature will be {minimum}{DEGREE_SYBMOL}, and will occur on date.\nThe highest temperature will be {maximum}{DEGREE_SYBMOL}, and will occur on Saturday 03 July 2021.\nThe average low this week is {ave_low_c}{DEGREE_SYBMOL}.\nThe average high this week is {ave_high_c}{DEGREE_SYBMOL}.")
+
+print(generate_summary([
+            ["2021-07-02T07:00:00+08:00", 49, 67],
+            ["2021-07-03T07:00:00+08:00", 57, 68],
+            ["2021-07-04T07:00:00+08:00", 56, 62],
+            ["2021-07-05T07:00:00+08:00", 55, 61],
+            ["2021-07-06T07:00:00+08:00", 53, 62]
+        ]))
 
 def generate_daily_summary(weather_data):
     """Outputs a daily summary for the given weather data.
