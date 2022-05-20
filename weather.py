@@ -178,8 +178,6 @@ def generate_summary(weather_data):
     maximum = convert_f_to_c(max(numbers))
 
     test = find_min(numbers)
-    print(test[1])
-    list.index(test[1])
 
     return(f"5 Day Overview\nThe lowest temperature will be {minimum}{DEGREE_SYBMOL}, and will occur on date.\nThe highest temperature will be {maximum}{DEGREE_SYBMOL}, and will occur on Saturday 03 July 2021.\nThe average low this week is {ave_low_c}{DEGREE_SYBMOL}.\nThe average high this week is {ave_high_c}{DEGREE_SYBMOL}.")
 
