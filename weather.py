@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import date, datetime
 from mimetypes import init
 from typing import ItemsView
 
@@ -152,21 +152,38 @@ def generate_summary(weather_data):
 
     list = []
     dates = []
-    numbers = []
     low_numbers = []
     high_numbers = []
+    days = 0
 
     for row in weather_data:
         list.append(row)
 
     for num in list:
-        numbers.append(num[1])
-        numbers.append(num[2])
-
-    for num in list:
         dates.append(num[0])
         low_numbers.append(num[1])
         high_numbers.append(num[2])
+        # Count days on list
+        if row[1] > days: 
+            days+= 1
+
+    # Finding min and max, and their respective indexes
+
+    min_num_and_index = find_min(low_numbers)
+    max_num_and_index = find_max(high_numbers)
+
+    min_number = min_num_and_index[0]
+    min_index = min_num_and_index[1]
+
+    max_number = max_num_and_index[0]
+    max_index = max_num_and_index[1]
+
+    # Converting min & max to celcius
+
+    min_celcius = convert_f_to_c(min_number)
+    max_celcius = convert_f_to_c(max_number)
+
+    # Finding high & low mean, and converting to celcius
 
     ave_low_f = calculate_mean(low_numbers)
     ave_low_c = convert_f_to_c(ave_low_f)
@@ -174,20 +191,15 @@ def generate_summary(weather_data):
     ave_high_f = calculate_mean(high_numbers)
     ave_high_c = convert_f_to_c(ave_high_f)
 
-    minimum = convert_f_to_c(min(numbers))
-    maximum = convert_f_to_c(max(numbers))
+    # Finding dates based on min and max index
 
-    test = find_min(numbers)
+    min_iso_date = dates[min_index]
+    min_human_date = convert_date(min_iso_date)
 
-    return(f"5 Day Overview\nThe lowest temperature will be {minimum}{DEGREE_SYBMOL}, and will occur on date.\nThe highest temperature will be {maximum}{DEGREE_SYBMOL}, and will occur on Saturday 03 July 2021.\nThe average low this week is {ave_low_c}{DEGREE_SYBMOL}.\nThe average high this week is {ave_high_c}{DEGREE_SYBMOL}.")
+    max_iso_date = dates[max_index]
+    max_human_date = convert_date(max_iso_date)
 
-print(generate_summary([
-            ["2021-07-02T07:00:00+08:00", 49, 67],
-            ["2021-07-03T07:00:00+08:00", 57, 68],
-            ["2021-07-04T07:00:00+08:00", 56, 62],
-            ["2021-07-05T07:00:00+08:00", 55, 61],
-            ["2021-07-06T07:00:00+08:00", 53, 62]
-        ]))
+    return(f"{days} Day Overview\n  The lowest temperature will be {min_celcius}{DEGREE_SYBMOL}, and will occur on {min_human_date}.\n  The highest temperature will be {max_celcius}{DEGREE_SYBMOL}, and will occur on {max_human_date}.\n  The average low this week is {ave_low_c}{DEGREE_SYBMOL}.\n  The average high this week is {ave_high_c}{DEGREE_SYBMOL}.\n")
 
 def generate_daily_summary(weather_data):
     """Outputs a daily summary for the given weather data.
@@ -197,4 +209,54 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+
+    list = []
+    dates = []
+    low_numbers = []
+    high_numbers = []
+
+    for row in weather_data:
+        list.append(row)
+
+    for num in list:
+        dates.append(num[0])
+        low_numbers.append(num[1])
+        high_numbers.append(num[2])
+
+     # Finding min and max, and their respective indexes
+
+    min_num_and_index = find_min(low_numbers)
+    max_num_and_index = find_max(high_numbers)
+
+    min_number = min_num_and_index[0]
+    min_index = min_num_and_index[1]
+
+    max_number = max_num_and_index[0]
+    max_index = max_num_and_index[1]
+
+    # Converting min & max to celcius
+
+    min_celcius = convert_f_to_c(min_number)
+    max_celcius = convert_f_to_c(max_number)
+
+    # Finding dates based on min and max index
+
+    min_iso_date = dates[min_index]
+    min_human_date = convert_date(min_iso_date)
+
+    max_iso_date = dates[max_index]
+    max_human_date = convert_date(max_iso_date)
+
+    return(f"  ----  ----\n  Minimum Temperature: {min_celcius}{DEGREE_SYBMOL}\n  Maximum Temperature: {max_celcius}{DEGREE_SYBMOL}")
+
+#     ---- Friday 02 July 2021 ----
+#   Minimum Temperature: 9.4°C
+#   Maximum Temperature: 19.4°C
+
+print(generate_daily_summary([
+            ["2021-07-02T07:00:00+08:00", 49, 67],
+            ["2021-07-03T07:00:00+08:00", 57, 68],
+            ["2021-07-04T07:00:00+08:00", 56, 62],
+            ["2021-07-05T07:00:00+08:00", 55, 61],
+            ["2021-07-06T07:00:00+08:00", 53, 62]
+        ]))
