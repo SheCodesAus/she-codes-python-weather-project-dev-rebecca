@@ -199,7 +199,7 @@ def generate_summary(weather_data):
     max_iso_date = dates[max_index]
     max_human_date = convert_date(max_iso_date)
 
-    return(f"{days} Day Overview\n  The lowest temperature will be {min_celcius}{DEGREE_SYBMOL}, and will occur on {min_human_date}.\n  The highest temperature will be {max_celcius}{DEGREE_SYBMOL}, and will occur on {max_human_date}.\n  The average low this week is {ave_low_c}{DEGREE_SYBMOL}.\n  The average high this week is {ave_high_c}{DEGREE_SYBMOL}.\n")
+    return(f"{days} Day Overview\n  The lowest temperature will be {min_celcius}{DEGREE_SYBMOL}, and will occur on {min_human_date}.\n  The highest temperature will be {max_celcius}{DEGREE_SYBMOL}, and will occur on {max_human_date}.\n  The average low this week is {ave_low_c}{DEGREE_SYBMOL}.\n  The average high this week is {ave_high_c}{DEGREE_SYBMOL}.")
 
 def generate_daily_summary(weather_data):
     """Outputs a daily summary for the given weather data.
@@ -211,52 +211,17 @@ def generate_daily_summary(weather_data):
     """
 
     list = []
-    dates = []
-    low_numbers = []
-    high_numbers = []
+    result = ""
 
     for row in weather_data:
         list.append(row)
 
-    for num in list:
-        dates.append(num[0])
-        low_numbers.append(num[1])
-        high_numbers.append(num[2])
+    for x in list:
+        date = (convert_date(x[0]))
+        min = (format_temperature(convert_f_to_c(x[1])))
+        max = (format_temperature(convert_f_to_c(x[2])))
+        result += f"---- {date} ----\n"
+        result += f"  Minimum Temperature: {min}\n"
+        result += f"  Maximum Temperature: {max}\n\n"
 
-     # Finding min and max, and their respective indexes
-
-    min_num_and_index = find_min(low_numbers)
-    max_num_and_index = find_max(high_numbers)
-
-    min_number = min_num_and_index[0]
-    min_index = min_num_and_index[1]
-
-    max_number = max_num_and_index[0]
-    max_index = max_num_and_index[1]
-
-    # Converting min & max to celcius
-
-    min_celcius = convert_f_to_c(min_number)
-    max_celcius = convert_f_to_c(max_number)
-
-    # Finding dates based on min and max index
-
-    min_iso_date = dates[min_index]
-    min_human_date = convert_date(min_iso_date)
-
-    max_iso_date = dates[max_index]
-    max_human_date = convert_date(max_iso_date)
-
-    return(f"  ----  ----\n  Minimum Temperature: {min_celcius}{DEGREE_SYBMOL}\n  Maximum Temperature: {max_celcius}{DEGREE_SYBMOL}")
-
-#     ---- Friday 02 July 2021 ----
-#   Minimum Temperature: 9.4°C
-#   Maximum Temperature: 19.4°C
-
-print(generate_daily_summary([
-            ["2021-07-02T07:00:00+08:00", 49, 67],
-            ["2021-07-03T07:00:00+08:00", 57, 68],
-            ["2021-07-04T07:00:00+08:00", 56, 62],
-            ["2021-07-05T07:00:00+08:00", 55, 61],
-            ["2021-07-06T07:00:00+08:00", 53, 62]
-        ]))
+    return result
